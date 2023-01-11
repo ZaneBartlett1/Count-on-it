@@ -27,6 +27,7 @@
   * Side bar that you can create groups of buttons in. MAL is sort of kind of, if you squint, what I would want this to look like.
     * Add button
       * This would largely look like making a new table, defining column data types, etc.
+    * Possibly have a "Tables" section, this would only be if I went with the idea that there would be different tables that you attach buttons to
     * Radio button to show either the buttons or log view
     * A special section "views" which is just saved views
       * Would mostly just save if you're looking at log or button view, what buttons you have toggled, and what columns you have toggled.
