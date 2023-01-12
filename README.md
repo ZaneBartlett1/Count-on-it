@@ -1,4 +1,4 @@
-# Button-Board
+# Count-on-it
 
 * Primary goal is to practice being able to use Vite and Svelte for front end and do back end unit testing (just for python really) at a not complete shit level. May also be good to try to practice api requests in this, but not a primary goal.
 
