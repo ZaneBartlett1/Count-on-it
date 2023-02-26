@@ -30,7 +30,7 @@
   <AddCounter on:addCounter={addCounter} />
   <div>
     {#each counters as counter}
-    <Counter name={counter.name} count={counter.count} />
+    <Counter name={counter.name} />
     {/each}
   </div>
 </main>
