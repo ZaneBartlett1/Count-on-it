@@ -15,16 +15,6 @@
     name = '';
   }
 
-  function addCounter(newCounter) {
-    const { name, count } = newCounter.detail;
-    const newCounterComponent = new Counter({
-      target: document.body,
-      props: {
-        name: name,
-        count: count,
-      },
-    });
-  }
 </script>
 
 <form on:submit={handleSubmit}>
