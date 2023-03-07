@@ -1,6 +1,7 @@
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, jsonify
 import random
 from flask_cors import CORS
+import json
 
 from sqlalchemy import create_engine
 from sqlalchemy import exc
@@ -16,8 +17,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine("sqlite:///budget.db")
+engine = create_engine("sqlite:///count-on-it.db")
 Base = declarative_base()
+Session = sessionmaker(bind=engine)  # create a sessionmaker object
 
 class Counter(Base):
     __tablename__ = "Counter"
@@ -26,6 +28,9 @@ class Counter(Base):
     Date = Column(String)
     Name = Column(String)
     Count = Column(Integer, default=0)
+
+
+Base.metadata.create_all(engine)  # <--- Check and create the table
 
 app = Flask(__name__)
 CORS(app)
@@ -46,7 +51,60 @@ def hello():
     return str(random.randint(0, 100))
 
 
+@app.route("/counters")
+def get_counters():
+    session = Session()
+
+    counters = session.query(Counter).all()
+    counters_json = [{"id": counter.id, "Name": counter.Name, "Count": counter.Count} for counter in counters]
+
+    session.close()
+
+    return jsonify(counters_json)
+
+
+@app.route("/increment/<name>")
+def increment(name):
+    session = Session()  # create a session object
+
+    counter = session.query(Counter).filter_by(Name=name).first()
+    if counter:
+        counter.Count += 1
+    else:
+        counter = Counter(Name=name, Count=1)
+        session.add(counter)
+
+    session.commit()
+    count = counter.Count  # retrieve the count from the counter object
+
+    session.close()
+
+    return json.dumps({"count": count})  # return the count as part of a JSON object
+
+
+@app.route("/add-counter", methods=["POST"])
+def add_counter():
+    session = Session()
+
+    # Retrieve the name of the new counter from the request body
+    name = request.form.get("name")
+
+    # Check if a counter with the same name already exists
+    existing_counter = session.query(Counter).filter_by(Name=name).first()
+    if existing_counter:
+        session.close()
+        return "Counter with the same name already exists", 400
+
+    # Create a new Counter object with a count of 0
+    new_counter = Counter(Name=name, Count=0)
+    session.add(new_counter)
+    session.commit()
+
+    # Close the session and return a success message
+    session.close()
+    return "Counter successfully added"
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
-
-

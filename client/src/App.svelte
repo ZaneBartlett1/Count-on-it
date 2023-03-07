@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import Counter from './lib/Counter.svelte';
   import AddCounter from './lib/AddCounter.svelte';
   import Sidebar from './lib/Sidebar.svelte';
@@ -10,13 +11,23 @@
     counters = [...counters, counter];
   }
 
-
   let rand = -1;
   function getRand() {
-    fetch("http://localhost:5000/rand")
+    fetch('http://localhost:5000/rand')
       .then(d => d.text())
-      .then(d => (rand = Number(d)))
+      .then(d => (rand = Number(d)));
   }
+
+  onMount(() => {
+    fetch('http://localhost:5000/counters')
+      .then(res => res.json())
+      .then(data => {
+        counters = data.map(counter => ({
+          name: counter.Name,
+          count: counter.Count
+        }));
+      });
+  });
 </script>
 
 <main>
@@ -30,7 +41,7 @@
   <AddCounter on:addCounter={addCounter} />
   <div>
     {#each counters as counter}
-    <Counter name={counter.name} />
+    <Counter name={counter.name} count={counter.count} />
     {/each}
   </div>
 </main>
