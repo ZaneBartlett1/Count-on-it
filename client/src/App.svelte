@@ -11,13 +11,6 @@
     counters = [...counters, counter];
   }
 
-  let rand = -1;
-  function getRand() {
-    fetch('http://localhost:5000/rand')
-      .then(d => d.text())
-      .then(d => (rand = Number(d)));
-  }
-
   onMount(() => {
     fetch('http://localhost:5000/counters')
       .then(res => res.json())
@@ -31,13 +24,7 @@
 </script>
 
 <main>
-  <Sidebar />
-  <div class="screen-container">
-    <p>
-      Your number is {rand}!
-      <button on:click={getRand}>Get a random number</button>
-    </p>
-  </div>
+  <Sidebar {counters} />
   <AddCounter on:addCounter={addCounter} />
   <div>
     {#each counters as counter}
