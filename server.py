@@ -40,15 +40,11 @@ CORS(app)
 def base():
     return send_from_directory('client/public', 'index.html')
 
+
 # Path for all the static files (compiled JS/CSS, etc.)
 @app.route("/<path:path>")
 def home(path):
     return send_from_directory('client/public', path)
-
-
-@app.route("/rand")
-def hello():
-    return str(random.randint(0, 100))
 
 
 @app.route("/counters")
@@ -82,12 +78,9 @@ def increment(name):
     return json.dumps({"count": count})  # return the count as part of a JSON object
 
 
-@app.route("/add-counter", methods=["POST"])
-def add_counter():
+@app.route("/add-counter/<name>", methods=["POST"])
+def add_counter(name):
     session = Session()
-
-    # Retrieve the name of the new counter from the request body
-    name = request.form.get("name")
 
     # Check if a counter with the same name already exists
     existing_counter = session.query(Counter).filter_by(Name=name).first()
@@ -102,6 +95,7 @@ def add_counter():
 
     # Close the session and return a success message
     session.close()
+    
     return "Counter successfully added"
 
 
