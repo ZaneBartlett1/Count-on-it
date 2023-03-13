@@ -98,6 +98,24 @@ def add_counter(name):
     
     return "Counter successfully added"
 
+@app.route("/delete-counter/<name>", methods=["POST"])
+def delete_counter(name):
+    session = Session()
+
+    # Check if a counter with the name exists
+    existing_counter = session.query(Counter).filter_by(Name=name).first()
+    if existing_counter == False:
+        session.close()
+        return "Counter with the name does not exist", 400
+
+    session.delete(existing_counter)
+    session.commit()
+
+    # Close the session and return a success message
+    session.close()
+    
+    return "Counter successfully deleted"
+
 
 
 if __name__ == "__main__":
