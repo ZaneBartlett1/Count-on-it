@@ -1,22 +1,24 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 
   export let counters = [];
   let isCounterOpen = false;
-  
-
-  onMount(() => {
-    fetch('http://localhost:5000/counters')
-      .then(res => res.json())
-      .then(data => {
-        counters = data.map(counter => counter.Name);
-      });
-  });
 
   function toggleCounter() {
     isCounterOpen = !isCounterOpen;
   }
 
+  function addCounter() {
+    const newCounterName = prompt('Enter the name of the new counter:');
+    if (newCounterName) {
+      fetch(`http://127.0.0.1:5000/add-counter/${newCounterName}`, {method: 'POST'});
+      // Dispatch an event to notify the main component that a new counter was added
+      dispatch('addCounter', { name: newCounterName });
+  }
+}
 </script>
 
 <aside class="sidebar">
@@ -24,6 +26,7 @@
   <h2 on:click={toggleCounter}>
     <i class="arrow-icon">{isCounterOpen ? '▾' : '▸'}</i>
     Counters
+    <button class="add-counter-button" on:click={addCounter}>+</button>
   </h2>
   {#if isCounterOpen}
     <ul class="counter-list">
@@ -67,5 +70,15 @@
 
   .counter-list li {
     padding: 5px;
+  }
+
+  .add-counter-button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 3px 5px;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-left: 10px;
   }
 </style>
