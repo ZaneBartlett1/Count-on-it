@@ -6,28 +6,11 @@
 
 * I think tracking events is what I'll start with as a MVP and possibly look at doing the more ideal/powerful stuff from there if I'm still going strong
 
-### Next
-
-* Review what everything does again
-
-* Clean up project for my shit
-
-* Discuss front-end architecture
-  
-  * I have a main css file, how do I best use that with inline styling, etc
-  
-  * I added that sidebar.svelte, but how do I know where to add files like that correctly?
-  
-  * I sort of have a hard time on where to start with this. It feels like nothing is connected, if that makes sense? Like I have the side bar, but then I just add 200px of padding and ignore that? It doesn't feel like it's built in? Neither would just adding a button on this page. I guess I have a weak intuition for how connected things should feel
-
-* Breaking this into chunks and figure out next steps between then and next week since I don't just have something like make the random number button work anymore
-
 ### Tables
 
 #### Counter table
 
-* Going to do it all on one big table. This helps alivate the entire issue making column names match between tables for counters so that the tables. Instead in the view I'll allow users to save the name as something other than what it's actually called. So you'd have a generic name column for your books, movies, shows, etc, but then when you're viewing it under a view called something like "anime", the name will appear as "Anime name" or something instead.
-* Need to think about how I would do something like a "count" on the counter. Should it be an integer right on the table, or should it be a calculated field from the log produced by the counter.
+* Going to do it all on one big table. This helps alivate the entire issue making column names match between tables for counters so that the tables. Instead in the view I'll allow users to save the name as something other than what it's actually called, giving it an alias. So you'd have a generic name column for your books, movies, shows, etc, but then when you're viewing it under a view called something like "anime", the name will appear as "Anime name" or something instead. Nothing is saved if it's not saved to a view. 
 
 #### Log table
 
@@ -35,7 +18,7 @@
 
 #### Views table
 
-* This will be some properties like the ID, name, created date, etc. Then a lot of it will be the query the user saves.
+* Most of this will just be the query that's generated and then saved by a question using a WYSIWYG editor. It will also have some properties like the ID, name, created date, etc. Would save if you're looking at log or counter view and any relevant header info like filters, columns, sort, and alias. Need to think of anything else to be included
 
 #### Link table
 
@@ -64,19 +47,19 @@
 
 * As the counters themselves
 * A spreadsheet style log of counter clicks
-* Both
+* Both, I imagine something how it looks with a parent and subtask in Asana, but like instead of subtasks it's the logs
+![image](https://user-images.githubusercontent.com/85081861/225187010-0aa0dfc1-dc90-4609-a3fb-28c6b721a67a.png)
+
 
 ### Side bar
 
 * "Views" which is just saved views
-  * Would mostly just save if you're looking at log or counter view and any relevant header info like filters, columns, sort.
+  * Name that's mapped to a query, used by a view component to render counters/logs and apply filters
   * Might be worth considering have nested views. So that someone could have "stories" and then "books", "TV", "Movies" under that.
-* Possibly have a "Tables" section, this would only be if I went with the idea that there would be different tables that you attach counters to
-* User created sections (So I imagine this is like how in Asana a project needs to be in a team, but can be in multiple porfolios, which here is views)
-  * Maybe one premade section called "counters" or something just to start. Editable and deletable.
-  * Used to group counters
-  * Clicking the counter should pull up a view that's just the counter and the logs of clicks from that counter. Like how clicking it in Asana brings you to a default saved view of the project
-  * Able to toogle the entire section on or off
+* Counters
+  * This is just row on a spreadsheet looking view where each row is a counter
+* Logs
+  * This is basically like Counter, but for the longs. It'll be more than one row, but it'll still be filtered down to just the logs from that counter.
 
-Example 
-![PXL_20230112_033520178](https://user-images.githubusercontent.com/85081861/211969887-edb5ce13-9ef9-4cfa-9b76-d8bd4656699e.jpg)
+Example
+![PXL_20230315_024839697~2](https://user-images.githubusercontent.com/85081861/225192802-cbf39aaa-ea69-4124-bc2e-6e0ab10dc14c.jpg)
