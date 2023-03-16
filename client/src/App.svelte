@@ -23,7 +23,7 @@
 </script>
 
 <main>
-  <Sidebar {counters} on:addCounter={addCounter} />
+  <Sidebar {counters} on:addCounter={addCounter}/>
   <div>
     {#each counters as counter}
     <Counter name={counter.name} count={counter.count} />

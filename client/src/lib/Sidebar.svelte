@@ -3,7 +3,10 @@
   import { createEventDispatcher } from 'svelte';
 
   export let counters = [];
+
+  
   let isCounterOpen = false;
+  let selectedCounter = {name: null};
 
   const dispatch = createEventDispatcher();
 
@@ -17,22 +20,24 @@
       fetch(`http://127.0.0.1:5000/add-counter/${newCounterName}`, {method: 'POST'});
       // Dispatch an event to notify the main component that a new counter was added
       dispatch('addCounter', { name: newCounterName});
-      }
-  }
-
-  let showDeleteOptions = (event) => {
-    const name = event.target.dataset.name;
-    const deleteOption = prompt('Delete counter? Hit Enter or OK to delete', '');
-    if (deleteOption === '') {
-      fetch(`http://127.0.0.1:5000/delete-counter/${name}`, {method: 'DELETE'});
-      // Dispatch an event to notify the main component that a counter was deleted
-      dispatch('deleteCounter', { name: name });
     }
   }
 
+  let showOptions = (event) => {
+    const clickedCounterName = event.target.dataset.name;
+    if (selectedCounter === clickedCounterName) {
+      selectedCounter = null;
+    } else {
+      selectedCounter = clickedCounterName;
+    }
+  }
 
-  const deleteCounter = (name) => {
-    counters = counters.filter(counter => counter.name !== name);
+  let deleteCounter = () => {
+    fetch(`http://127.0.0.1:5000/delete-counter/${selectedCounter}`, {method: 'DELETE'});
+    // Dispatch an event to notify the main component that a counter was deleted
+    dispatch('deleteCounter', { name: selectedCounter });
+    counters = counters.filter(counter => counter.name !== selectedCounter);
+    selectedCounter = null; // reset the selected counter
   }
 
   onMount(() => {
@@ -53,12 +58,16 @@
   {#if isCounterOpen}
     <ul class="counter-list">
       {#each counters as counter}
-      <li>
-        <span>{counter.name}</span>
-        <button class="delete-counter-button" on:click={showDeleteOptions} data-name={counter.name}></button>
-      </li>
-    {/each}
-    
+        <li>
+          <span>{counter.name}</span>
+          <button class="general-button" on:click={showOptions} data-name={counter.name}>...</button>
+          {#if selectedCounter === counter.name}
+            <div class="modal">
+              <button class="general-button" on:click={deleteCounter}>Delete</button>
+            </div>
+          {/if}
+        </li>
+      {/each}
     </ul>
   {/if}
   <h2>Logs</h2>
@@ -87,13 +96,10 @@
   }
 
   .add-counter-button {
-    color: white;
     border: none;
     padding: 3px 5px;
     border-radius: 3px;
-    cursor: pointer;
     margin-left: 10px;
-    font-size: 1em;
     line-height: 1.5;
   }
 
@@ -111,44 +117,16 @@
     padding: 5px;
   }
 
-  .counter-list li:hover,
-  .counter-list li:hover .delete-counter-button {
+  .counter-list li:hover {
     background-color: #333;
   }
 
-  .counter-list li:hover .delete-counter-button::after {
-    content: "...";
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 5px;
-    opacity: 1;
-  }
-
-  .delete-counter-button {
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 3px;
-    cursor: pointer;
+  .general-button {
+    padding: 10px;
+    margin: 3px;
     margin-left: 10px;
-    font-size: 1.5em;
-    line-height: 0; 
+    line-height: 0;
   }
 
-  .delete-counter-button:hover {
-    background-color: #333;
-  }
-
-  .delete-counter-button::after {
-    content: "";
-    display: inline-block;
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-  }
-
-  .delete-counter-button:hover::after {
-    opacity: 1;
-  }
 
 </style>
