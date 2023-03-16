@@ -1,13 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import Counter from './lib/Counter.svelte';
-  import AddCounter from './lib/AddCounter.svelte';
   import Sidebar from './lib/Sidebar.svelte';
 
   let counters = [];
 
-  function addCounter(newCounter) {
-    const counter = { name: newCounter.detail.detail.name, count: 0 };
+  let addCounter = (newCounter) => {
+    const counter = {name: newCounter.detail.name};
     counters = [...counters, counter];
   }
 
@@ -24,8 +23,7 @@
 </script>
 
 <main>
-  <Sidebar {counters} />
-  <AddCounter on:addCounter={addCounter} />
+  <Sidebar {counters} on:addCounter={addCounter}/>
   <div>
     {#each counters as counter}
     <Counter name={counter.name} count={counter.count} />
