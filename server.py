@@ -98,7 +98,7 @@ def add_counter(name):
     
     return "Counter successfully added"
 
-@app.route("/delete-counter/<name>", methods=["POST"])
+@app.route("/delete-counter/<name>", methods=["DELETE"])
 def delete_counter(name):
     session = Session()
 
