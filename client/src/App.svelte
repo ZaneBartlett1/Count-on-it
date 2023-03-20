@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import Counter from './lib/Counter.svelte';
   import Sidebar from './lib/Sidebar.svelte';
+  import Spreadsheet from './lib/Spreadsheet.svelte';
 
   let counters = [];
 
@@ -23,11 +24,9 @@
 </script>
 
 <main>
-  <Sidebar {counters} on:addCounter={addCounter}/>
+  <Sidebar {counters} on:addCounter={addCounter} />
   <div>
-    {#each counters as counter}
-    <Counter name={counter.name} count={counter.count} />
-    {/each}
+    <Spreadsheet />
   </div>
 </main>
 
