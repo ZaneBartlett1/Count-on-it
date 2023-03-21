@@ -1,9 +1,8 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
 
   export let counters = [];
-
+  
   
   let isCounterOpen = false;
   let selectedCounter = {name: null};
@@ -14,12 +13,21 @@
     isCounterOpen = !isCounterOpen;
   }
 
-  let addCounter = () => {
+  let addCounter = async () => {
     const newCounterName = prompt('Enter the name of the new counter:');
     if (newCounterName) {
-      fetch(`http://127.0.0.1:5000/add-counter/${newCounterName}`, {method: 'POST'});
-      // Dispatch an event to notify the main component that a new counter was added
-      dispatch('addCounter', { name: newCounterName});
+      const response = await fetch(`http://127.0.0.1:5000/add-counter/${newCounterName}`, {method: 'POST'});
+      const data = await response.json();
+      if (!data.error) {
+        const newCounter = {
+          id: data.id,
+          name: newCounterName,
+          count: 0
+        };
+        dispatch('addCounter', { detail: newCounter });
+      } else {
+        alert(data.error);
+      }
     }
   }
 
@@ -39,12 +47,6 @@
     counters = counters.filter(counter => counter.name !== selectedCounter);
     selectedCounter = null; // reset the selected counter
   }
-
-  onMount(() => {
-    fetch('http://127.0.0.1:5000/get-counters')
-      .then(response => response.json())
-      .then(data => counters = data);
-  });
 </script>
 
 
