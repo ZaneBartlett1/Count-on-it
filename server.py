@@ -61,7 +61,7 @@ def get_counters():
 
 @app.route("/increment/<name>")
 def increment(name):
-    session = Session()  # create a session object
+    session = Session()
 
     counter = session.query(Counter).filter_by(Name=name).first()
     if counter:
@@ -86,17 +86,20 @@ def add_counter(name):
     existing_counter = session.query(Counter).filter_by(Name=name).first()
     if existing_counter:
         session.close()
-        return "Counter with the same name already exists", 400
+        return jsonify({"error": "Counter with the same name already exists"}), 400
 
     # Create a new Counter object with a count of 0
     new_counter = Counter(Name=name, Count=0)
     session.add(new_counter)
     session.commit()
 
-    # Close the session and return a success message
+    new_id = new_counter.id
+
+    # Close the session and return a success message with the new counter's ID
     session.close()
     
-    return "Counter successfully added"
+    return jsonify({"id": new_id, "message": "Counter successfully added"})
+
 
 @app.route("/delete-counter/<name>", methods=["DELETE"])
 def delete_counter(name):

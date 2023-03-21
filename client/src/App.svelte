@@ -1,21 +1,25 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import Counter from './lib/Counter.svelte';
   import Sidebar from './lib/Sidebar.svelte';
   import Spreadsheet from './lib/Spreadsheet.svelte';
 
   let counters = [];
 
-  let addCounter = (newCounter) => {
-    const counter = {name: newCounter.detail.name};
-    counters = [...counters, counter];
-  }
+  let addCounter = (event) => {
+    const newCounter = {
+      id: event.detail.detail.id,
+      name: event.detail.detail.name,
+      count: event.detail.detail.count
+    };
+    counters = [...counters, newCounter];
+  };
 
   onMount(() => {
     fetch('http://localhost:5000/counters')
       .then(res => res.json())
       .then(data => {
         counters = data.map(counter => ({
+          id: counter.id,
           name: counter.Name,
           count: counter.Count
         }));
@@ -26,7 +30,7 @@
 <main>
   <Sidebar {counters} on:addCounter={addCounter} />
   <div>
-    <Spreadsheet />
+    <Spreadsheet {counters} />
   </div>
 </main>
 
