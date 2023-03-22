@@ -1,16 +1,21 @@
 # Count-on-it
 
-* Primary goal is to practice being able to use Vite and Svelte for front end and do back end unit testing (just for python really) at a not complete shit level. May also be good to try to practice api requests for outside the app, but not a primary goal.
+* As a project to improve my skills - Primary goal is to practice being able to use Vite and Svelte for front end and do unit testing (just for python really) at a basic level. May also be good to try to practice api requests for outside the app once I have things set up, but not a primary goal.
 
-* For the app itself - Ideally I'd want something that would be powerful enough to basically track progress for a movie/show/book etc, producing a list and also be flexiable enough that it could also be used to nicely track simple events like how many times someone finishes their cup of water, goes for a walk, etc
+* For the app itself - Ideally I'd want something that would be powerful enough to basically track progress for a movie/show/book etc, producing a list and also be flexible enough that it could also be used to nicely track simple events like how many times someone finishes their cup of water, goes for a walk, etc. The way I would plan on doing this is having a table of event loggers, "counters", and when you "count" on them, you're really just doing one of two things - either logging an instance of that event, or you might literally be incrementing on the counter table. What I think is going to be very powerful about this is that the users would, ideally, be able to create columns on either the counter table or the log table. These columns would, ideally, be able to track values, but also do calculations. 
 
-* I think tracking events is what I'll start with as a MVP and possibly look at doing the more ideal/powerful stuff from there if I'm still going strong
+Example
+![PXL_20230315_024839697~2](https://user-images.githubusercontent.com/85081861/225192802-cbf39aaa-ea69-4124-bc2e-6e0ab10dc14c.jpg)
+
+Progress as of 2023/03/21
+
+[Screencast from 03-21-2023 11:44:33 PM.webm](https://user-images.githubusercontent.com/85081861/226804620-c9f253bb-05ae-4cef-bba2-2a83dba79ee0.webm)
 
 ### Tables
 
 #### Counter table
 
-* Going to do it all on one big table. This helps alivate the entire issue making column names match between tables for counters so that the tables. Instead in the view I'll allow users to save the name as something other than what it's actually called, giving it an alias. So you'd have a generic name column for your books, movies, shows, etc, but then when you're viewing it under a view called something like "anime", the name will appear as "Anime name" or something instead. Nothing is saved if it's not saved to a view. 
+* Going to do it all on one big table. This helps alleviate the entire issue by making column names match between tables for counters so that the tables. Instead in the view I'll allow users to save the name as something other than what it's actually called, giving it an alias. So you'd have a generic name column for your books, movies, shows, etc, but then when you're viewing it under a view called something like "anime", the name will appear as "Anime name" or something instead. Nothing is saved if it's not saved to a view. 
 
 #### Log table
 
@@ -18,14 +23,12 @@
 
 #### Views table
 
-* Most of this will just be the query that's generated and then saved by a question using a WYSIWYG editor. It will also have some properties like the ID, name, created date, etc. Would save if you're looking at log or counter view and any relevant header info like filters, columns, sort, and alias. Need to think of anything else to be included
+* Most of this will just be the query that's generated and then saved by a question using a WYSIWYG editor. It will also have some properties like the ID, name, created date, etc. Would save if you're looking at log or counter view and any relevant header info like filters, columns, sort, and alias. Need to think of anything else to be included.
 
 #### Link table
 
-* Used to link views to corrisponding counters, columns, filters, user's query, etc. I need to think about if I need multiple link tables for this, or just the one.
-  
-  ![image](https://user-images.githubusercontent.com/85081861/212760670-c2276661-d030-4af4-b8c8-3460e4b4e3a0.png)
-  
+* Used to link views to corresponding counters, columns, filters, user's query, etc. I need to think about if I need multiple link tables for this, or just the one.
+Basic example - 
   ```
   SELECT Counters.*
   FROM Counters
@@ -59,7 +62,4 @@
 * Counters
   * This is just row on a spreadsheet looking view where each row is a counter
 * Logs
-  * This is basically like Counter, but for the longs. It'll be more than one row, but it'll still be filtered down to just the logs from that counter.
-
-Example
-![PXL_20230315_024839697~2](https://user-images.githubusercontent.com/85081861/225192802-cbf39aaa-ea69-4124-bc2e-6e0ab10dc14c.jpg)
+  * This is basically like Counter, but for the logs. It'll be more than one row, but it'll still be filtered down to just the logs from that counter.
