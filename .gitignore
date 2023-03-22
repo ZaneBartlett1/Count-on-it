@@ -1,2 +1,3 @@
 venv
 count-on-it.db
+**/__pycache__/

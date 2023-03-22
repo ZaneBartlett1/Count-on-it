@@ -1,5 +1,4 @@
 from flask import Flask, send_from_directory, jsonify
-import random
 from flask_cors import CORS
 import json
 
@@ -13,9 +12,9 @@ from sqlalchemy import String
 from sqlalchemy import Integer
 from sqlalchemy import Float
 from sqlalchemy import ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base
 
 engine = create_engine("sqlite:///count-on-it.db")
 Base = declarative_base()
