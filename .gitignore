@@ -1,3 +1,4 @@
 venv
 count-on-it.db
 **/__pycache__/
+.vscode/

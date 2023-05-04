@@ -20,6 +20,7 @@ engine = create_engine("sqlite:///count-on-it.db")
 Base = declarative_base()
 Session = sessionmaker(bind=engine)  # create a sessionmaker object
 
+
 class Counter(Base):
     __tablename__ = "Counter"
 
@@ -34,16 +35,19 @@ Base.metadata.create_all(engine)  # <--- Check and create the table
 app = Flask(__name__)
 CORS(app)
 
+
 # Path for our main Svelte page
 @app.route("/")
 def base():
-    return send_from_directory('client/public', 'index.html')
+    return send_from_directory("client/public", "index.html")
 
 
 # Path for all the static files (compiled JS/CSS, etc.)
+# To note, since this is going to be a SPA application, and I'm using Svelte with Vite,
+# it makes sense follow Svelte and Vite conevention and not worry about hitting an API calls
 @app.route("/<path:path>")
 def home(path):
-    return send_from_directory('client/public', path)
+    return send_from_directory("client/public", path)
 
 
 @app.route("/counters")
@@ -51,7 +55,10 @@ def get_counters():
     session = Session()
 
     counters = session.query(Counter).all()
-    counters_json = [{"id": counter.id, "Name": counter.Name, "Count": counter.Count} for counter in counters]
+    counters_json = [
+        {"id": counter.id, "Name": counter.Name, "Count": counter.Count}
+        for counter in counters
+    ]
 
     session.close()
 
@@ -96,7 +103,7 @@ def add_counter(name):
 
     # Close the session and return a success message with the new counter's ID
     session.close()
-    
+
     return jsonify({"id": new_id, "message": "Counter successfully added"})
 
 
@@ -115,9 +122,8 @@ def delete_counter(name):
 
     # Close the session and return a success message
     session.close()
-    
-    return "Counter successfully deleted"
 
+    return "Counter successfully deleted"
 
 
 if __name__ == "__main__":
