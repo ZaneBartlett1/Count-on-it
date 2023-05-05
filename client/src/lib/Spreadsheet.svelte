@@ -1,12 +1,12 @@
-<script>
-  import { onMount } from 'svelte';
+<script lang="ts">
+  import { onMount } from "svelte";
 
-  export let counters = [];
-  let headers = [];
-  let rows = [];
+  export let counters: { id: number; name: string; count: number }[] = [];
+  let headers: (string | number)[] = [];
+  let rows: (string | number)[][] = [];
 
   onMount(async () => {
-    const res = await fetch('http://localhost:5000/counters');
+    const res = await fetch("http://localhost:5000/counters");
     const data = await res.json();
     headers = Object.keys(data[0]).reverse();
     addEmptyRowsAndColumns();
@@ -14,27 +14,33 @@
 
   $: {
     // Update headers and rows whenever the counters array changes
-    rows = counters.map(counter => Object.values(counter));
+    rows = counters.map(
+      (counter: { id: number; name: string; count: number }) =>
+        Object.values(counter)
+    );
     addEmptyRowsAndColumns();
   }
 
+  /**
+   * Adds empty rows and columns to fill the spreadsheet.
+   */
   const addEmptyRowsAndColumns = () => {
     const totalColumns = 15;
     const totalRows = 100;
 
     while (headers.length < totalColumns) {
-      headers.push('');
+      headers.push("");
     }
 
-    rows = rows.map(row => {
+    rows = rows.map((row: (string | number)[]) => {
       while (row.length < totalColumns) {
-        row.push('');
+        row.push("");
       }
       return row;
     });
 
     while (rows.length < totalRows) {
-      const emptyRow = new Array(totalColumns).fill('');
+      const emptyRow = new Array(totalColumns).fill("");
       rows.push(emptyRow);
     }
   };

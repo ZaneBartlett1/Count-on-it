@@ -1,59 +1,85 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from "svelte";
 
   export let counters = [];
-  
-  
+
+  interface Counter {
+    id: number;
+    name: string;
+    count: number;
+  }
+
   let isCounterOpen = false;
-  let selectedCounter = {name: null};
+  let selectedCounter: string | null = null;
 
   const dispatch = createEventDispatcher();
 
+  /**
+   * Toggles the visibility of the counter list.
+   */
   let toggleCounter = () => {
     isCounterOpen = !isCounterOpen;
-  }
+  };
 
+  /**
+   * Adds a new counter and dispatches an event to notify the parent component.
+   */
   let addCounter = async () => {
-    const newCounterName = prompt('Enter the name of the new counter:');
+    const newCounterName = prompt("Enter the name of the new counter:");
     if (newCounterName) {
-      const response = await fetch(`http://127.0.0.1:5000/add-counter/${newCounterName}`, {method: 'POST'});
+      const response = await fetch(
+        `http://127.0.0.1:5000/add-counter/${newCounterName}`,
+        { method: "POST" }
+      );
       const data = await response.json();
       if (!data.error) {
-        const newCounter = {
+        const newCounter: Counter = {
           id: data.id,
           name: newCounterName,
-          count: 0
+          count: 0,
         };
-        dispatch('addCounter', { detail: newCounter });
+        dispatch("addCounter", { detail: newCounter });
       } else {
         alert(data.error);
       }
     }
-  }
+  };
 
-  let showOptions = (event) => {
-    const clickedCounterName = event.target.dataset.name;
+  /**
+   * Toggles the visibility of the options for a counter.
+   * @param {Event} event - The click event.
+   */
+  let showOptions = (event: Event) => {
+    const clickedCounterName = (event.target as HTMLElement).dataset.name;
     if (selectedCounter === clickedCounterName) {
       selectedCounter = null;
     } else {
       selectedCounter = clickedCounterName;
     }
-  }
+  };
 
+  /**
+   * Deletes the selected counter and dispatches an event to notify the parent component.
+   */
   let deleteCounter = () => {
-    fetch(`http://127.0.0.1:5000/delete-counter/${selectedCounter}`, {method: 'DELETE'});
+    fetch(`http://127.0.0.1:5000/delete-counter/${selectedCounter}`, {
+      method: "DELETE",
+    });
     // Dispatch an event to notify the main component that a counter was deleted
-    dispatch('deleteCounter', { name: selectedCounter });
-    counters = counters.filter(counter => counter.name !== selectedCounter);
+    dispatch("deleteCounter", { name: selectedCounter });
+    counters = counters.filter(
+      (counter: Counter) => counter.name !== selectedCounter
+    );
     selectedCounter = null; // reset the selected counter
-  }
+  };
 </script>
-
 
 <aside class="sidebar">
   <h2>Views</h2>
   <h2>
-    <span class="arrow-icon" on:click={toggleCounter}>{isCounterOpen ? '▾' : '▸'}</span>
+    <span class="arrow-icon" on:click={toggleCounter}
+      >{isCounterOpen ? "▾" : "▸"}</span
+    >
     <span>Counters</span>
     <button class="add-counter-button" on:click={addCounter}>+</button>
   </h2>
@@ -62,10 +88,16 @@
       {#each counters as counter}
         <li>
           <span>{counter.name}</span>
-          <button class="general-button" on:click={showOptions} data-name={counter.name}>...</button>
+          <button
+            class="general-button"
+            on:click={showOptions}
+            data-name={counter.name}>...</button
+          >
           {#if selectedCounter === counter.name}
             <div class="modal">
-              <button class="general-button" on:click={deleteCounter}>Delete</button>
+              <button class="general-button" on:click={deleteCounter}
+                >Delete</button
+              >
             </div>
           {/if}
         </li>
@@ -74,7 +106,6 @@
   {/if}
   <h2>Logs</h2>
 </aside>
-
 
 <style>
   .sidebar {
@@ -129,6 +160,4 @@
     margin-left: 10px;
     line-height: 0;
   }
-
-
 </style>
