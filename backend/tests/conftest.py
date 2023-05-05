@@ -1,6 +1,6 @@
 # tests/conftest.py
 import pytest
-from server import app
+from backend.src.server import app
 
 
 @pytest.fixture
