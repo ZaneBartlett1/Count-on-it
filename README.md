@@ -36,6 +36,13 @@
 
 * I use myanimelist to track different anime that I've watched, and wished there was a more generic version of it for all my shows. I also wish I could have a basic counter app to keep track of random things and possibly to do different analyses with the data I generate. I realized that myanimelist is largely just a list of shows that I'm pressing an incrementer on, and is no different from the kind of counter that I wanted. So I decided to make this!
 
+Progress as of 03/21/23
+
+[Screencast from 03-21-2023 11:44:33 PM.webm](https://user-images.githubusercontent.com/85081861/226804620-c9f253bb-05ae-4cef-bba2-2a83dba79ee0.webm)
+
+Example of what a finished product would look like
+
+![PXL_20230315_024839697~2](https://user-images.githubusercontent.com/85081861/225192802-cbf39aaa-ea69-4124-bc2e-6e0ab10dc14c.jpg)
 
 ## General outline
 
@@ -108,10 +115,3 @@ Basic example -
 * Logs
   * This is basically like Counter, but for the logs. It'll be more than one row, but it'll still be filtered down to just the logs from that counter.
 
-
-Example of what a finished product would look like
-![PXL_20230315_024839697~2](https://user-images.githubusercontent.com/85081861/225192802-cbf39aaa-ea69-4124-bc2e-6e0ab10dc14c.jpg)
-
-
-Progress as of 2023/03/21
-[Screencast from 03-21-2023 11:44:33 PM.webm](https://user-images.githubusercontent.com/85081861/226804620-c9f253bb-05ae-4cef-bba2-2a83dba79ee0.webm)
