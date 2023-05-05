@@ -1,27 +1,37 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import Sidebar from './lib/Sidebar.svelte';
-  import Spreadsheet from './lib/Spreadsheet.svelte';
+  import { onMount } from "svelte";
+  import Sidebar from "./lib/Sidebar.svelte";
+  import Spreadsheet from "./lib/Spreadsheet.svelte";
 
-  let counters = [];
+  interface Counter {
+    id: number;
+    name: string;
+    count: number;
+  }
 
-  let addCounter = (event) => {
-    const newCounter = {
+  let counters: Counter[] = [];
+
+  /**
+   * Adds a new counter to the counters array.
+   * @param {CustomEvent} event - The custom event containing the new counter's details.
+   */
+  let addCounter = (event: CustomEvent) => {
+    const newCounter: Counter = {
       id: event.detail.detail.id,
       name: event.detail.detail.name,
-      count: event.detail.detail.count
+      count: event.detail.detail.count,
     };
     counters = [...counters, newCounter];
   };
 
   onMount(() => {
-    fetch('http://localhost:5000/counters')
-      .then(res => res.json())
-      .then(data => {
-        counters = data.map(counter => ({
+    fetch("http://localhost:5000/counters")
+      .then((res) => res.json())
+      .then((data) => {
+        counters = data.map((counter: any) => ({
           id: counter.id,
           name: counter.Name,
-          count: counter.Count
+          count: counter.Count,
         }));
       });
   });
