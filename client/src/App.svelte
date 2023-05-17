@@ -24,6 +24,14 @@
     counters = [...counters, newCounter];
   };
 
+  /**
+   * Deletes selected counter
+   * @param {CustomEvent} event - The custom event containing the new counter's details.
+   */
+  let deleteCounter = (event: CustomEvent) => {
+    counters = counters.filter((counter) => counter.name !== event.detail.name);
+  };
+
   onMount(() => {
     fetch("http://localhost:5000/counters")
       .then((res) => res.json())
@@ -38,7 +46,11 @@
 </script>
 
 <main>
-  <Sidebar {counters} on:addCounter={addCounter} />
+  <Sidebar
+    {counters}
+    on:addCounter={addCounter}
+    on:deleteCounter={deleteCounter}
+  />
   <div>
     <Spreadsheet {counters} />
   </div>
