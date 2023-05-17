@@ -10,7 +10,7 @@
   }
 
   let isCounterOpen = false;
-  let selectedCounter: string | null = null;
+  let selectedCounter: number | null = null;
 
   const dispatch = createEventDispatcher();
 
@@ -27,10 +27,11 @@
   let addCounter = async () => {
     const newCounterName = prompt("Enter the name of the new counter:");
     if (newCounterName) {
-      const response = await fetch(
-        `http://127.0.0.1:5000/add-counter/${newCounterName}`,
-        { method: "POST" }
-      );
+      const response = await fetch(`http://127.0.0.1:5000/add-counter`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `name=${newCounterName}`,
+      });
       const data = await response.json();
       if (!data.error) {
         const newCounter: Counter = {
@@ -50,11 +51,11 @@
    * @param {Event} event - The click event.
    */
   let showOptions = (event: Event) => {
-    const clickedCounterName = (event.target as HTMLElement).dataset.name;
-    if (selectedCounter === clickedCounterName) {
+    const clickedCounterId = Number((event.target as HTMLElement).dataset.id);
+    if (selectedCounter === clickedCounterId) {
       selectedCounter = null;
     } else {
-      selectedCounter = clickedCounterName;
+      selectedCounter = clickedCounterId;
     }
   };
 
@@ -66,9 +67,9 @@
       method: "DELETE",
     });
     // Dispatch an event to notify the main component that a counter was deleted
-    dispatch("deleteCounter", { name: selectedCounter });
+    dispatch("deleteCounter", { id: selectedCounter });
     counters = counters.filter(
-      (counter: Counter) => counter.name !== selectedCounter
+      (counter: Counter) => counter.id !== selectedCounter
     );
     selectedCounter = null; // reset the selected counter
   };
@@ -91,9 +92,9 @@
           <button
             class="general-button"
             on:click={showOptions}
-            data-name={counter.name}>...</button
+            data-id={counter.id}>...</button
           >
-          {#if selectedCounter === counter.name}
+          {#if selectedCounter === counter.id}
             <div class="modal">
               <button class="general-button" on:click={deleteCounter}
                 >Delete</button
