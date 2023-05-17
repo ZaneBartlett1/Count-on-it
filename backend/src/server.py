@@ -2,36 +2,7 @@ from typing import List, Tuple, Union
 from flask import Flask, send_from_directory, jsonify, Response, request
 from flask_cors import CORS
 import json
-
-from sqlalchemy import create_engine
-from sqlalchemy import exc
-from sqlalchemy import select
-from sqlalchemy import insert
-from sqlalchemy import update
-from sqlalchemy import Column
-from sqlalchemy import String
-from sqlalchemy import Integer
-from sqlalchemy import Float
-from sqlalchemy import ForeignKey
-from sqlalchemy.engine.base import Engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base
-
-engine = create_engine("sqlite:///count-on-it.db")
-Base = declarative_base()
-Session = sessionmaker(bind=engine)  # create a sessionmaker object
-
-
-class Counter(Base):
-    __tablename__ = "Counter"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    Date = Column(String)
-    Name = Column(String)
-    Count = Column(Integer, default=0)
-
-
-Base.metadata.create_all(engine)  # <--- Check and create the table
+from orm import Session, Counter
 
 app = Flask(__name__)
 CORS(app)
