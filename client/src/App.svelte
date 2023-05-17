@@ -29,7 +29,7 @@
    * @param {CustomEvent} event - The custom event containing the new counter's details.
    */
   let deleteCounter = (event: CustomEvent) => {
-    counters = counters.filter((counter) => counter.name !== event.detail.name);
+    counters = counters.filter((counter) => counter.id !== event.detail.id);
   };
 
   onMount(() => {
