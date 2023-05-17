@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  export let counters: { id: number; name: string; count: number }[] = [];
+  export let counters: { id: number; Name: string; Count: number }[] = [];
   let headers: (string | number)[] = [];
   let rows: (string | number)[][] = [];
 
@@ -15,7 +15,7 @@
   $: {
     // Update headers and rows whenever the counters array changes
     rows = counters.map(
-      (counter: { id: number; name: string; count: number }) =>
+      (counter: { id: number; Name: string; Count: number }) =>
         Object.values(counter)
     );
     addEmptyRowsAndColumns();
